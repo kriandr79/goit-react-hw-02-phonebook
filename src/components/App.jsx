@@ -16,33 +16,42 @@ export class App extends Component {
   };
 
   formSubmitHandler = data => {
-
     if (this.state.contacts.find(contact => contact.name === data.name)) {
-      alert('Alert');
-      return; 
+      alert(`${data.name} is already exist in the phonebook!`);
+      return;
     }
-   
+
     const newContact = { name: data.name, number: data.number, id: nanoid() };
-     
-    this.setState(prevState => ({
-        contacts: [...prevState.contacts, newContact],
-      }));
-   
+
+    this.setState(({ contacts }) => ({
+      contacts: [...contacts, newContact],
+    }));
   };
 
   handleFilter = e => {
-     this.setState({
-       filter: e.currentTarget.value,
-     });
-  }
+    this.setState({
+      filter: e.currentTarget.value,
+    });
+  };
 
-  render() {
+  deleteContact = contactId => {
+     this.setState(({ contacts }) => ({
+       contacts: contacts.filter(contact => contact.id !== contactId),
+     }));
+  };
+
+  getFilteredContacts = () => {
     const { contacts, filter } = this.state;
 
     const normalazedFilter = filter.toLowerCase();
-    const filteredContacts = contacts.filter(contact =>
+    return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalazedFilter)
     );
+  };
+
+  render() {
+    const { filter } = this.state;
+    const filteredContacts = this.getFilteredContacts();
 
     return (
       <div>
@@ -51,7 +60,10 @@ export class App extends Component {
 
         <h2>Contacts</h2>
         <Filter value={filter} onChange={this.handleFilter} />
-        <ContactList contacts={filteredContacts} />
+        <ContactList
+          contacts={filteredContacts}
+          onDeleteContact={this.deleteContact}
+        />
       </div>
     );
   }

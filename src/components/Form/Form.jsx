@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import css from './Form.module.css'
 
 export default class Form extends Component {
   state = {
@@ -7,8 +8,6 @@ export default class Form extends Component {
   };
 
   handleInput = e => {
-    // console.log(e.currentTarget.name);
-    // console.log(e.currentTarget.value);
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value,
     });
@@ -32,29 +31,34 @@ export default class Form extends Component {
  
 
     return (
-      <form onSubmit={this.handleFormSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleInput}
-            required
-          />
-        </label>
-        <label>
-          Number:
-          <input
-            type="tel"
-            name="number"
-            value={this.state.number}
-            onChange={this.handleInput}
-            required
-          />
-        </label>
-        <button type="submit">Add contact</button>
-      </form>
+      <div className={css.formdiv}>
+        <form className={css.form} onSubmit={this.handleFormSubmit}>
+          <label>
+            <p>Name:</p>
+            <input
+              type="text"
+              name="name"
+              value={this.state.name}
+              onChange={this.handleInput}
+              required
+            />
+          </label>
+          <label>
+            <p>Number:</p>
+            <input
+              type="tel"
+              name="number"
+              value={this.state.number}
+              onChange={this.handleInput}
+              pattern="[0-9\-]+"
+              required
+            />
+          </label>
+          <button className={css.btn} type="submit">
+            Add contact
+          </button>
+        </form>
+      </div>
     );
   }
 }
